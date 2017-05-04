@@ -28,6 +28,8 @@ int		create_client(char *addr, int port)
 	sock = socket(PF_INET, SOCK_STREAM, protocole->p_proto);
 	syn.sin_family = AF_INET;
 	syn.sin_port = htons(port);
+	if (!ft_strcmp(addr, "localhost"))
+			addr = "127.0.0.1";
 	syn.sin_addr.s_addr = inet_addr(addr);
 	if (connect(sock, (const struct sockaddr *)&syn, sizeof(syn)) == -1)
 		ft_exit("CHECK YOU CONNECTION OR YOU FIREWALL PARAMETERS\n");

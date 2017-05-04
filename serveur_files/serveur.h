@@ -15,10 +15,6 @@
 
 
 
-typedef struct s_clients {
-	char				*addr;
-	struct s_clients	*next;
-} t_clients;
 
 /*
 ** Server instance functions 
@@ -30,6 +26,12 @@ typedef struct s_clients {
 */
 int			create_server(int port);
 
+
+/*
+** Commands
+*/
+void		run_ls(struct sockaddr_in syn, int cs);
+void		run_pwd(struct sockaddr_in syn, int cs);
 /*
 ** Tools Functions
 */

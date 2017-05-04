@@ -29,7 +29,6 @@ int		main(int argc, char **argv)
 	int						r;
 	char					buffer[1024];
 	pid_t					father;
-	char *const parmList[] = {"/bin/ls", "-l", NULL};
 
 	ft_printf("\e[1;1H\e[2J");
 	if (argc != 2 || ft_strcmp(ft_itoa(ft_atoi(argv[1])), argv[1]))
@@ -41,6 +40,7 @@ int		main(int argc, char **argv)
 	//signal_handler();
 	while (1)
 	{
+		synlen = sizeof(syn);
 		cs = accept(sock, (struct sockaddr*) &syn, &synlen);
 		father = fork();
 		if (father == -1)
@@ -53,19 +53,9 @@ int		main(int argc, char **argv)
 				buffer[r] = '\0';
 				ft_printf("received %d bytes: [%s]\n", r, buffer);
 				if (!ft_strcmp(buffer, "ls"))
-				{
-					ft_printf("[SERVER ✅  ] received ls from %s\n", inet_ntoa(syn.sin_addr));
-					father = fork();
-					if (father == -1)
-						ft_exit("FORk ERROR\n");
-					else if (father == 0)
-					{
-						dup2(cs, 1);
-						execv("/bin/ls", parmList);
-					}
-					else 
-						wait(&father);
-				}
+					run_ls(syn, cs);
+				else if (!ft_strcmp(buffer, "pwd"))
+					run_pwd(syn, cs);
 				else
 					send_unknow_message(cs);
 			}
