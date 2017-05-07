@@ -12,6 +12,11 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/types.h>
+#include <fcntl.h>
+#include <errno.h>
+
+int			g_actual_socket;
+
 /*
 ** Client instance functions 
 */
