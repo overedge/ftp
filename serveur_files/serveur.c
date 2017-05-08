@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   serveur.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nahmed-m <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/05/08 13:22:52 by nahmed-m          #+#    #+#             */
+/*   Updated: 2017/05/08 13:22:54 by nahmed-m         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "serveur.h"
 
 int		create_server(int port)
@@ -46,6 +58,13 @@ void	parse_command(char *buffer, struct sockaddr_in syn, int cs, char *path)
 			run_cd(syn, cs, path, split[1]);
 		else
 			run_cd_default(syn, cs, path);
+	}
+	else if (split[0] && !ft_strcmp(split[0], "get"))
+	{
+		if (split && split[1])
+			run_get(syn, cs, path, split[1]);
+		else
+			run_get(syn, cs, path, NULL);
 	}
 	else
 		send_unknow_message(cs);

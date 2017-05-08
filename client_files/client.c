@@ -99,7 +99,7 @@ void	parse_inputs(int sock)
 		recv(sock, data, 300000, 0);
 	if (data[0] && data[0] == '|' && data[1] && data[1] == '#' && data[2])
 	{
-		//printf("the size is %u\n", ft_atoi(&data[2]));
+	//	printf("the size is %u\n", ft_atoi(&data[2]));
 		get_file(sock, ft_atoi(&data[2]), line);
 	}
 	else

@@ -53,6 +53,18 @@ void	verify_path_cd(char *path, char *newpath)
 	exit(0);
 }
 
+int		verify_path_file(char *path)
+{
+	int	error;
+
+	error = 0;
+	if (ft_strstr(path, "..") != NULL)
+		error++;
+	if (path[0] && path[0] == '/')
+		error++;
+	return (error);
+}
+
 void	run_cd_default(struct sockaddr_in syn, int cs, char *path)
 {
 	char		*message;

@@ -6,7 +6,7 @@
 /*   By: nahmed-m <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/08 09:17:32 by nahmed-m          #+#    #+#             */
-/*   Updated: 2017/05/08 11:49:53 by nahmed-m         ###   ########.fr       */
+/*   Updated: 2017/05/08 11:54:01 by nahmed-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,15 @@ void	run_cd(struct sockaddr_in syn, int cs, char *path, char *new)
 	else
 		wait4(father, &status, 0, NULL);
 	ft_printf("STATUS = %d\n", WEXITSTATUS(status));
-	if (WEXITSTATUS(status) == 0 && chdir(new) != -1)
+	if (WEXITSTATUS(status) == 0)
 		send(cs, message, ft_strlen(message), 0);
 	else
-		send(cs, message2, ft_strlen(message2), 0);
+	{
+		if (chdir(new) == -1)
+			send(cs, message, ft_strlen(message), 0);
+		else
+			send(cs, message2, ft_strlen(message2), 0);
+	}
 }
 
 void	run_simple_ls(struct sockaddr_in syn, int cs)
