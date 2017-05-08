@@ -1,4 +1,4 @@
-SRC_NAME = serveur.c signal.c tools.c
+SRC_NAME = serveur.c signal.c tools.c cmd.c
 
 NAME = "serveur"
 

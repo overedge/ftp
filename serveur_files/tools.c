@@ -22,38 +22,48 @@ void	usage(char *argv, char error)
 	exit(EXIT_FAILURE);
 }
 
-void	run_ls(struct sockaddr_in syn, int cs)
+int		verify_path_ls(char *options, char *path)
 {
-	pid_t	father;
-	char *const parmList[] = {"/bin/ls", NULL};
+	int	error;
 
-	ft_printf("[SERVER 📶  received ls fron %s\n", inet_ntoa(syn.sin_addr));
-	father = fork();
-	if (father == -1)
-		ft_exit("FORk ERROR\n");
-	else if (father == 0)
+	error = 0;
+	if (ft_strstr(options, "..") != NULL)
+		error++;
+	if (options[0] && options[0] == '/')
+		error++;
+	if (path)
 	{
-		dup2(cs, 1);
-		execv("/bin/ls", parmList);
+		if (ft_strstr(path, "..") != NULL)
+			error++;
+		if (path[0] && path[0] == '/')
+			error++;
 	}
-	else 
-		wait(&father);
+	return (error);
 }
 
-void	run_pwd(struct sockaddr_in syn, int cs)
+void	verify_path_cd(char *path, char *newpath)
 {
-	pid_t	father;
-	char *const parmList[] = {"/bin/pwd", NULL};
+	char		tmp[3000];
 
-	ft_printf("[SERVER 📶  received pwd fron %s\n", inet_ntoa(syn.sin_addr));
-	father = fork();
-	if (father == -1)
-		ft_exit("FORk ERROR\n");
-	else if (father == 0)
-	{
-		dup2(cs, 1);
-		execv("/bin/pwd", parmList);
-	}
-	else 
-		wait(&father);
+	if (chdir(newpath) == -1)
+		exit(0);
+	getcwd(tmp, 3000);
+	if (!ft_strncmp(path, tmp, ft_strlen(path)))
+		exit(1);
+	exit(0);
+}
+
+void	run_cd_default(struct sockaddr_in syn, int cs, char *path)
+{
+	char		*message;
+	char		*message2;
+
+	ft_printf("[SERVER 📶  received cd from %s - 🌐 USER_ID = %d \n",\
+			inet_ntoa(syn.sin_addr), cs);
+	message = "\033[31;1;4;5;7m 🚫  cd : chdir failed \n \033[0m";
+	message2 = "✅  CD SUCCESS \n";
+	if (chdir(path) == -1)
+		send(cs, message, ft_strlen(message), 0);
+	else
+		send(cs, message2, ft_strlen(message2), 0);
 }
