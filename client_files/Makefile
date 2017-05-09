@@ -1,4 +1,4 @@
-SRC_NAME = client.c
+SRC_NAME = client.c get.c
 
 NAME = "client"
 

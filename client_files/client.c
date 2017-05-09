@@ -36,46 +36,6 @@ int		create_client(char *addr, int port)
 	return (sock);
 }
 
-void	get_file(int sock, unsigned int size, char *line)
-{
-	char			**split;
-	int				fd;
-	unsigned int	count;
-	unsigned int	tmp;
-
-	char			*message;
-	char			data[300000];
-
-	count = 0;
-	message = "\033[31;1;4;5;7m This file existe in you filesystem🚫 \033[0m";
-	split = ft_strsplit(line, ' ');
-
-	ft_bzero(data,300000);
-	if (split && split[1])
-	{
-		ft_printf("this file : %s\n", split[1]);
-		fd = open(split[1], O_WRONLY | O_CREAT | O_EXCL, S_IRWXU);
-		if (fd < 0)
-		{
-			send(sock, "KO", ft_strlen("KO"), 0);
-			ft_printf("%s\n", message);
-		}
-		else
-		{
-			send(sock, "KO", ft_strlen("OK"), 0);
-			while (count < size)
-			{
-				ft_bzero(data,300000);
-				ft_printf("izi\n");
-				tmp = recv(sock, data, 300000, 0);
-				write(fd, data, tmp);
-				count += tmp;
-			}
-			close(fd);
-			ft_printf("FILE ARE SUCCESS DOWNLOAD ✅  \n");
-		}
-	}
-}
 
 
 void	parse_inputs(int sock)
@@ -99,7 +59,7 @@ void	parse_inputs(int sock)
 		recv(sock, data, 300000, 0);
 	if (data[0] && data[0] == '|' && data[1] && data[1] == '#' && data[2])
 	{
-	//	printf("the size is %u\n", ft_atoi(&data[2]));
+		printf("the size is %u\n", ft_atoi(&data[2]));
 		get_file(sock, ft_atoi(&data[2]), line);
 	}
 	else

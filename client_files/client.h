@@ -1,5 +1,5 @@
-#ifndef SERVEUR_H
-# define SERVEUR_H
+#ifndef CLIENT_H
+# define CLIENT_H
 
 #include "../libft_files/includes/libft.h"
 #include <stdlib.h>
@@ -22,6 +22,7 @@ int			g_actual_socket;
 */
 int			create_client(char *addr, int port);
 void		parse_inputs(int sock);
+void		get_file(int sock, unsigned int size, char *line);
 
 /*
 ** Tools Functions
