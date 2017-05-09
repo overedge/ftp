@@ -6,7 +6,7 @@
 /*   By: nahmed-m <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/08 13:23:00 by nahmed-m          #+#    #+#             */
-/*   Updated: 2017/05/09 10:23:15 by nahmed-m         ###   ########.fr       */
+/*   Updated: 2017/05/09 15:48:36 by nahmed-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ void		send_file(struct sockaddr_in syn, int cs, int fd, struct stat buf)
 	int			r;
 
 	send_size(buf.st_size, cs);
-	ft_printf("[SERVER 📶  received get from %s - 🌐  USER_ID = %d \n",\
-			inet_ntoa(syn.sin_addr), cs);
+	ft_printf("[SERVER 📶  received get from %s \n",\
+			inet_ntoa(syn.sin_addr));
 	ft_bzero(data, 300000);
 	recv(cs, data, 300000, 0);
 	if (!ft_strcmp("KO", data))

@@ -6,7 +6,7 @@
 /*   By: nahmed-m <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/09 13:58:30 by nahmed-m          #+#    #+#             */
-/*   Updated: 2017/05/09 13:59:20 by nahmed-m         ###   ########.fr       */
+/*   Updated: 2017/05/09 15:49:06 by nahmed-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ void	run_cd_default(struct sockaddr_in syn, int cs, char *path)
 	char		*message;
 	char		*message2;
 
-	ft_printf("[SERVER 📶  received cd from %s - 🌐 USER_ID = %d \n",\
-			inet_ntoa(syn.sin_addr), cs);
+	ft_printf("[SERVER 📶  received cd from %s %d \n",\
+			inet_ntoa(syn.sin_addr));
 	message = "\033[31;1;4;5;7m 🚫  cd : chdir failed \n \033[0m";
 	message2 = "✅  CD SUCCESS \n";
 	if (chdir(path) == -1)
