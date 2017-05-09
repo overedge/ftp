@@ -1,25 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nahmed-m <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/05/09 13:50:53 by nahmed-m          #+#    #+#             */
-/*   Updated: 2017/05/09 13:50:57 by nahmed-m         ###   ########.fr       */
+/*   Created: 2017/05/09 13:54:25 by nahmed-m          #+#    #+#             */
+/*   Updated: 2017/05/09 14:04:18 by nahmed-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "serveur.h"
+#include "client.h"
 
-void	catchme(int signal)
+void	usage(char *argv, char error)
 {
-	ft_printf("[SERVER 🅾️i] the signal %d catched .. Exit ..\n", signal);
-	close(g_signal_fd);
+	if (error == 0)
+		ft_printf("%s <addr> <port>\n", argv);
+	else
+		ft_printf("%s <addr ipv4> <port [1 - 65535]> \n", argv);
 	exit(EXIT_FAILURE);
 }
 
-void	signal_handler(void)
+void	ft_exit(char *str)
 {
-	signal(SIGINT, catchme);
+	ft_putstr_fd(str, 2);
+	exit(EXIT_FAILURE);
 }

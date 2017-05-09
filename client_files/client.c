@@ -1,20 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   client.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nahmed-m <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/05/09 13:54:20 by nahmed-m          #+#    #+#             */
+/*   Updated: 2017/05/09 13:55:36 by nahmed-m         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "client.h"
-
-void	usage(char *argv, char error)
-{
-	if (error == 0)
-		ft_printf("%s <add> <port>\n", argv);
-	else
-		ft_printf("%s <addr ipv4> <port [1 - 65535]> \n", argv);
-	exit(EXIT_FAILURE);
-}
-
-void	ft_exit(char *str)
-{
-	ft_putstr_fd(str, 2);
-	exit(EXIT_FAILURE);
-}
-
 
 int		create_client(char *addr, int port)
 {
@@ -29,14 +25,12 @@ int		create_client(char *addr, int port)
 	syn.sin_family = AF_INET;
 	syn.sin_port = htons(port);
 	if (!ft_strcmp(addr, "localhost"))
-			addr = "127.0.0.1";
+		addr = "127.0.0.1";
 	syn.sin_addr.s_addr = inet_addr(addr);
 	if (connect(sock, (const struct sockaddr *)&syn, sizeof(syn)) == -1)
 		ft_exit("CHECK YOU CONNECTION OR YOU FIREWALL PARAMETERS\n");
 	return (sock);
 }
-
-
 
 void	parse_inputs(int sock)
 {
@@ -54,14 +48,12 @@ void	parse_inputs(int sock)
 	}
 	send(sock, line, ft_strlen(line), 0);
 	ft_bzero(data, 300000);
-	//ft_printf("Line = %d | line = %s\n", ft_strlen(line), line);
 	if (ft_strlen(line) > 0)
 		recv(sock, data, 300000, 0);
 	if (data[0] && data[0] == '|' && data[1] && data[1] == '#' && data[2])
-	{
-		printf("the size is %u\n", ft_atoi(&data[2]));
 		get_file(sock, ft_atoi(&data[2]), line);
-	}
+	else if (data[1] && !ft_strcmp("OK", data))
+		put_file(sock, line);
 	else
 		ft_printf("%s\n", data);
 }
@@ -95,4 +87,3 @@ int		main(int argc, char **argv)
 	ft_putstr_fd("Connection on serveur was canceled !\n", 2);
 	return (EXIT_FAILURE);
 }
-

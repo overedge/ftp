@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   tools2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nahmed-m <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/05/09 13:50:53 by nahmed-m          #+#    #+#             */
-/*   Updated: 2017/05/09 13:50:57 by nahmed-m         ###   ########.fr       */
+/*   Created: 2017/05/09 13:58:59 by nahmed-m          #+#    #+#             */
+/*   Updated: 2017/05/09 14:00:24 by nahmed-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "serveur.h"
 
-void	catchme(int signal)
+void	send_unknow_message(int sock)
 {
-	ft_printf("[SERVER 🅾️i] the signal %d catched .. Exit ..\n", signal);
-	close(g_signal_fd);
-	exit(EXIT_FAILURE);
+	char *message;
+
+	message = "\033[31;1;4;5;7mBad Cli\n\033[0m";
+	send(sock, message, ft_strlen(message), 0);
 }
 
-void	signal_handler(void)
+void	ft_exit(char *str)
 {
-	signal(SIGINT, catchme);
+	ft_putstr_fd(str, 2);
+	exit(EXIT_FAILURE);
 }

@@ -6,7 +6,7 @@
 /*   By: nahmed-m <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/08 13:23:00 by nahmed-m          #+#    #+#             */
-/*   Updated: 2017/05/08 16:25:28 by nahmed-m         ###   ########.fr       */
+/*   Updated: 2017/05/09 10:23:15 by nahmed-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void		send_file(struct sockaddr_in syn, int cs, int fd, struct stat buf)
 	}
 }
 
-void		run_get(struct sockaddr_in syn, int cs, char *path, char *file)
+void		run_get(struct sockaddr_in syn, int cs, char *file)
 {
 	char		*message;
 	int			fd;

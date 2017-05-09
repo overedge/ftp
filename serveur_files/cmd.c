@@ -6,7 +6,7 @@
 /*   By: nahmed-m <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/08 09:17:32 by nahmed-m          #+#    #+#             */
-/*   Updated: 2017/05/08 11:54:01 by nahmed-m         ###   ########.fr       */
+/*   Updated: 2017/05/09 14:01:32 by nahmed-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	run_ls(struct sockaddr_in syn, int cs, char *options, char *path)
 	char		*message;
 
 	message = "\033[31;1;4;5;7m 🚫  ls : only in directory \n \
-					 (no subdirectory) usage of ls [options] [dir] \033[0m";
-	ft_printf("[SERVER 📶  received ls from %s - 🌐 USER_ID = %d \n",\
-			inet_ntoa(syn.sin_addr), cs);
+	(no subdirectory) usage of ls [options] [dir] \033[0m";
+	ft_printf("[SERVER 📶  received ls from %s \n",\
+			inet_ntoa(syn.sin_addr));
 	if (verify_path_ls(options, path) != 0)
 	{
 		send(cs, message, ft_strlen(message), 0);
@@ -47,8 +47,8 @@ void	run_cd(struct sockaddr_in syn, int cs, char *path, char *new)
 	char		*message2;
 	int			status;
 
-	ft_printf("[SERVER 📶  received cd from %s - 🌐 USER_ID = %d \n",\
-			inet_ntoa(syn.sin_addr), cs);
+	ft_printf("[SERVER 📶  received cd from %s \n",\
+			inet_ntoa(syn.sin_addr));
 	message = "\033[31;1;4;5;7m 🚫  cd : Bad path \n\033[0m";
 	message2 = "✅  CD SUCCESS \n";
 	father = fork();
@@ -58,7 +58,6 @@ void	run_cd(struct sockaddr_in syn, int cs, char *path, char *new)
 		verify_path_cd(path, new);
 	else
 		wait4(father, &status, 0, NULL);
-	ft_printf("STATUS = %d\n", WEXITSTATUS(status));
 	if (WEXITSTATUS(status) == 0)
 		send(cs, message, ft_strlen(message), 0);
 	else
@@ -75,8 +74,8 @@ void	run_simple_ls(struct sockaddr_in syn, int cs)
 	pid_t		father;
 	char *const	parmlist[] = {"/bin/ls", NULL};
 
-	ft_printf("[SERVER 📶  received ls from %s - 🌐 USER_ID = %d \n",\
-			inet_ntoa(syn.sin_addr), cs);
+	ft_printf("[SERVER 📶  received ls from %s \n",\
+			inet_ntoa(syn.sin_addr));
 	father = fork();
 	if (father == -1)
 		ft_exit("FORk ERROR\n");
@@ -92,11 +91,11 @@ void	run_simple_ls(struct sockaddr_in syn, int cs)
 
 void	run_pwd(struct sockaddr_in syn, int cs)
 {
-	pid_t	father;
-	char *const parmlist[] = {"/bin/pwd", NULL};
+	pid_t		father;
+	char *const	parmlist[] = {"/bin/pwd", NULL};
 
-	ft_printf("[SERVER 📶  received pwd from %s - 🌐 USER_ID = %d \n",\
-			inet_ntoa(syn.sin_addr), cs);
+	ft_printf("[SERVER 📶  received pwd from %s \n",\
+			inet_ntoa(syn.sin_addr));
 	father = fork();
 	if (father == -1)
 		ft_exit("FORk ERROR\n");
@@ -112,8 +111,8 @@ void	run_pwd(struct sockaddr_in syn, int cs)
 
 void	run_quit(struct sockaddr_in syn, int cs)
 {
-	ft_printf("[SERVER 🚫  ] user disconnected %s - 🌐  USER_ID = %d \n",
-			inet_ntoa(syn.sin_addr), cs);
+	ft_printf("[SERVER 🚫  ] user disconnected %s \n",
+			inet_ntoa(syn.sin_addr));
 	close(cs);
 	exit(EXIT_SUCCESS);
 }

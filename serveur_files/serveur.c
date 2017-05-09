@@ -6,7 +6,7 @@
 /*   By: nahmed-m <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/08 13:22:52 by nahmed-m          #+#    #+#             */
-/*   Updated: 2017/05/08 13:22:54 by nahmed-m         ###   ########.fr       */
+/*   Updated: 2017/05/09 14:02:22 by nahmed-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,28 @@ int		create_server(int port)
 	return (sock);
 }
 
+void	parse_command_2(char **split, struct sockaddr_in syn, int cs)
+{
+	if (split[0] && !ft_strcmp(split[0], "get"))
+	{
+		if (split && split[1])
+			run_get(syn, cs, split[1]);
+		else
+			run_get(syn, cs, NULL);
+	}
+	else if (split[0] && !ft_strcmp(split[0], "put"))
+	{
+		if (split && split[1])
+			run_put(syn, cs, split[1]);
+		else
+			run_put(syn, cs, NULL);
+	}
+	else if (split[0] && (!ft_strcmp(split[0], "quit")\
+				|| !ft_strcmp(split[0], "TERM42KO")))
+		run_quit(syn, cs);
+	else
+		send_unknow_message(cs);
+}
 
 void	parse_command(char *buffer, struct sockaddr_in syn, int cs, char *path)
 {
@@ -50,8 +72,6 @@ void	parse_command(char *buffer, struct sockaddr_in syn, int cs, char *path)
 	}
 	else if (split[0] && !ft_strcmp(split[0], "pwd"))
 		run_pwd(syn, cs);
-	else if (split[0] && (!ft_strcmp(split[0], "quit") || !ft_strcmp(split[0], "TERM42KO")))
-		run_quit(syn, cs);
 	else if (split[0] && !ft_strcmp(split[0], "cd"))
 	{
 		if (split && split[1])
@@ -59,16 +79,8 @@ void	parse_command(char *buffer, struct sockaddr_in syn, int cs, char *path)
 		else
 			run_cd_default(syn, cs, path);
 	}
-	else if (split[0] && !ft_strcmp(split[0], "get"))
-	{
-		if (split && split[1])
-			run_get(syn, cs, path, split[1]);
-		else
-			run_get(syn, cs, path, NULL);
-	}
 	else
-		send_unknow_message(cs);
-
+		parse_command_2(split, syn, cs);
 }
 
 void	create_client(int cs, struct sockaddr_in syn)
@@ -85,16 +97,17 @@ void	create_client(int cs, struct sockaddr_in syn)
 		ft_exit("FORK ERROR\n");
 	else if (father == 0)
 	{
-		ft_printf("[SERVER ✅i ] Connection from %s - 🌐  USER_ID = %d \n",
-				inet_ntoa(syn.sin_addr), cs);
+		ft_printf("[SERVER ✅i ] Connection from %s \n",
+				inet_ntoa(syn.sin_addr));
 		g_signal_fd = cs;
 		signal_handler();
 		while ((r = read(cs, buffer, 1023)) > 0)
 		{
 			buffer[r] = '\0';
-			ft_printf("received %d bytes: [%s]\n", r, buffer);
+			ft_printf("bytes : %d  [%s]\n", r, buffer);
 			parse_command(buffer, syn, cs, path);
 		}
+		exit(1);
 	}
 	close(cs);
 }
@@ -104,7 +117,7 @@ int		main(int argc, char **argv)
 	int						port;
 	int						sock;
 	int						cs;
-	struct					sockaddr_in syn;
+	struct sockaddr_in		syn;
 	unsigned int			synlen;
 
 	ft_printf("\e[1;1H\e[2J");
@@ -119,7 +132,7 @@ int		main(int argc, char **argv)
 	signal_handler();
 	while (1)
 	{
-		cs = accept(sock, (struct sockaddr*) &syn, &synlen);
+		cs = accept(sock, (struct sockaddr*)&syn, &synlen);
 		create_client(cs, syn);
 	}
 	close(sock);

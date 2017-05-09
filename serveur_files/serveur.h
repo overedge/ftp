@@ -1,30 +1,38 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   serveur.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nahmed-m <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/05/09 13:53:53 by nahmed-m          #+#    #+#             */
+/*   Updated: 2017/05/09 13:53:58 by nahmed-m         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SERVEUR_H
 # define SERVEUR_H
 
-#include "../libft_files/includes/libft.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <stdio.h>
-#include <stdio.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <sys/wait.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-
-
+# include "../libft_files/includes/libft.h"
+# include <stdlib.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <sys/socket.h>
+# include <netdb.h>
+# include <stdio.h>
+# include <stdio.h>
+# include <netinet/in.h>
+# include <arpa/inet.h>
+# include <sys/wait.h>
+# include <fcntl.h>
+# include <sys/stat.h>
 
 int			g_signal_fd;
 /*
-** Server instance functions 
+** Server instance functions
 */
 void		parse_command(char *buffer, struct sockaddr_in syn, int cs,\
 			char *path);
-
-
 /*
 ** Create Servers
 */
@@ -32,7 +40,6 @@ int			create_server(int port);
 void		create_client(int cs, struct sockaddr_in syn);
 void		parse_command(char *buffer, struct sockaddr_in syn, int cs,\
 			char *path);
-
 /*
 ** Commands
 */
@@ -41,7 +48,8 @@ void		run_simple_ls(struct sockaddr_in syn, int cs);
 void		run_cd(struct sockaddr_in syn, int cs, char *path, char *new);
 void		run_pwd(struct sockaddr_in syn, int cs);
 void		run_quit(struct sockaddr_in syn, int cs);
-void		run_get(struct sockaddr_in syn, int cs, char *path, char *file);
+void		run_get(struct sockaddr_in syn, int cs, char *file);
+void		run_put(struct sockaddr_in syn, int cs, char *file);
 /*
 ** Tools Functions
 */
